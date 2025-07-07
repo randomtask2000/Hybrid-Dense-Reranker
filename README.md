@@ -101,6 +101,11 @@ Edit the `.env` file and replace `your-anthropic-api-key-here` with your actual 
 ```bash
 # Get your API key from: https://console.anthropic.com/
 ANTHROPIC_API_KEY=your-actual-api-key-here
+
+# Corpus Configuration (optional)
+CORPUS_SOURCE=default  # Options: 'default' or 'mormon'
+CHUNK_SIZE=1000        # Maximum characters per chunk (for Mormon corpus)
+CHUNK_OVERLAP=100      # Character overlap between chunks
 ```
 
 **Alternative method** - Set environment variable directly:
@@ -163,6 +168,66 @@ pip install package-name
 pip freeze > requirements.txt
 ```
 
+## Corpus Configuration
+
+The application supports configurable corpus sources, allowing you to switch between different document collections:
+
+### Available Corpus Sources
+
+1. **Default Corpus** (`CORPUS_SOURCE=default`):
+   - Contains sample legal documents
+   - Includes contracts, compliance memos, and risk assessments
+   - Ready to use out of the box
+
+2. **Mormon Corpus** (`CORPUS_SOURCE=mormon`):
+   - Loads text from `data/mormon13short.txt`
+   - Automatically chunks the Book of Mormon text into manageable pieces
+   - Configurable chunk size and overlap
+
+### Configuration Options
+
+Set these environment variables in your `.env` file:
+
+```bash
+# Corpus source selection
+CORPUS_SOURCE=default  # Options: 'default' or 'mormon'
+
+# Text chunking configuration (applies to Mormon corpus)
+CHUNK_SIZE=1000        # Maximum characters per chunk
+CHUNK_OVERLAP=100      # Characters to overlap between chunks
+```
+
+### Using the Mormon Corpus
+
+To use the Mormon corpus:
+
+1. Ensure `data/mormon13short.txt` exists in your project
+2. Set `CORPUS_SOURCE=mormon` in your `.env` file
+3. Configure chunk size and overlap as needed
+4. Restart the application
+
+The application will automatically:
+- Parse verse references (e.g., "1 Nephi 1:1")
+- Create chunks based on your size settings
+- Maintain context with configurable overlap
+- Fall back to default corpus if the file is not found
+
+### Example Queries by Corpus
+
+**Default Corpus (Legal Documents):**
+```bash
+curl -X POST http://localhost:5000/rag-query \
+  -H "Content-Type: application/json" \
+  -d '{"query": "contract liability and legal risks"}'
+```
+
+**Mormon Corpus:**
+```bash
+curl -X POST http://localhost:5000/rag-query \
+  -H "Content-Type: application/json" \
+  -d '{"query": "Nephi and his teachings about faith"}'
+```
+
 ## Usage
 
 The application provides a RAG (Retrieval-Augmented Generation) endpoint:
@@ -201,3 +266,44 @@ The application returns enhanced results with multiple scoring methods:
 - **Cost Effective**: TF-IDF embeddings are free and fast
 - **Intelligent**: Claude provides nuanced relevance understanding
 - **Scalable**: Can handle large document collections efficiently
+
+## Testing
+
+For comprehensive testing instructions, including integration tests and performance tests, see [TESTING.md](TESTING.md).
+
+### Quick Test Run
+```bash
+# Validate setup
+python validate_test_setup.py
+
+# Run all tests
+python run_integration_tests.py
+```
+
+### Corpus Configuration Testing
+
+Test the new corpus configuration functionality:
+
+```bash
+# Quick validation of corpus configuration
+python test_corpus_quick.py
+
+# Comprehensive corpus configuration tests
+python run_corpus_tests.py
+
+# Unit tests for corpus functionality
+python test_corpus_config.py
+
+# Integration tests for corpus workflow
+python test_corpus_integration.py
+```
+
+### Test Different Corpus Sources
+
+```bash
+# Test with default corpus
+CORPUS_SOURCE=default python test_corpus_quick.py
+
+# Test with Mormon corpus (if file exists)
+CORPUS_SOURCE=mormon CHUNK_SIZE=500 python test_corpus_quick.py
+```

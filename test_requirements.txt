@@ -3,3 +3,8 @@ pytest>=7.0.0
 pytest-flask>=1.2.0
 pytest-cov>=4.0.0
 coverage>=6.0.0
+
+# Additional testing utilities for corpus configuration tests
+unittest-xml-reporting>=3.2.0
+parameterized>=0.8.1
+mock>=4.0.3
