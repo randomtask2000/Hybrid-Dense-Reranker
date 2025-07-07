@@ -188,6 +188,26 @@ pytest test_corpus_integration.py::TestCorpusConfigurationEdgeCases -v
 ### Option 5: Running Specific Test Methods
 You can run individual test methods for focused testing or debugging:
 
+#### Using Python unittest module (no additional dependencies required):
+```bash
+# Run a specific test method using Python's built-in unittest
+python -m unittest test_corpus_integration.TestCorpusIntegrationWorkflow.test_tree_of_life_citations_and_meanings_real_data -v
+
+# Run multiple specific test methods (separate commands)
+python -m unittest test_integration.TestAppIntegration.test_rag_query_endpoint_valid -v
+python -m unittest test_corpus_config.TestCorpusConfiguration.test_load_mormon_corpus -v
+
+# Run specific test class with all its methods
+python -m unittest test_corpus_integration.TestCorpusIntegrationWorkflow -v
+
+# Run with higher verbosity for detailed output
+python -m unittest test_corpus_integration.TestCorpusIntegrationWorkflow.test_tree_of_life_citations_and_meanings_real_data -v
+
+# Alternative: Run test file and specify specific method manually
+python test_corpus_integration.py TestCorpusIntegrationWorkflow.test_tree_of_life_citations_and_meanings_real_data
+```
+
+#### Using pytest (requires `pip install pytest`):
 ```bash
 # Run a specific test method using pytest
 pytest test_corpus_integration.py::TestCorpusIntegrationWorkflow::test_tree_of_life_citations_and_meanings_real_data -v
@@ -199,14 +219,34 @@ pytest test_corpus_config.py::TestCorpusConfiguration::test_load_mormon_corpus -
 # Run specific test method with extra verbosity and output
 pytest test_corpus_integration.py::TestCorpusIntegrationWorkflow::test_tree_of_life_citations_and_meanings_real_data -v -s
 
-# Using unittest module directly (alternative approach)
-python -m unittest test_corpus_integration.TestCorpusIntegrationWorkflow.test_tree_of_life_citations_and_meanings_real_data -v
-
 # Run test method with coverage report
 pytest test_corpus_integration.py::TestCorpusIntegrationWorkflow::test_tree_of_life_citations_and_meanings_real_data -v --cov=app
 ```
 
 **Common Test Method Examples:**
+
+#### Using Python unittest (recommended for basic testing):
+```bash
+# Test the tree of life analysis with real Mormon data
+python -m unittest test_corpus_integration.TestCorpusIntegrationWorkflow.test_tree_of_life_citations_and_meanings_real_data -v
+
+# Test basic RAG query functionality
+python -m unittest test_integration.TestAppIntegration.test_rag_query_endpoint_valid -v
+
+# Test Mormon corpus loading
+python -m unittest test_corpus_config.TestCorpusConfiguration.test_load_mormon_corpus -v
+
+# Test Claude API integration
+python -m unittest test_integration.TestAppIntegration.test_analyze_with_claude_function -v
+
+# Test corpus switching workflow
+python -m unittest test_corpus_integration.TestCorpusIntegrationWorkflow.test_corpus_switching -v
+
+# Run an entire test class
+python -m unittest test_corpus_integration.TestCorpusIntegrationWorkflow -v
+```
+
+#### Using pytest (for advanced features like coverage):
 ```bash
 # Test the tree of life analysis with real Mormon data
 pytest test_corpus_integration.py::TestCorpusIntegrationWorkflow::test_tree_of_life_citations_and_meanings_real_data -v
@@ -225,11 +265,27 @@ pytest test_corpus_integration.py::TestCorpusIntegrationWorkflow::test_corpus_sw
 ```
 
 **Pro Tips for Running Specific Tests:**
+
+#### For Python unittest:
+- Use `-v` for verbose output to see detailed test information
+- Use `python -m unittest` instead of direct file execution for better module resolution
+- Test method names use dot notation: `module.TestClass.test_method`
+- Run entire test classes by omitting the method name: `python -m unittest test_file.TestClass -v`
+- Use `python -m unittest discover` to find and run all tests in the current directory
+
+#### For pytest:
 - Use `-v` for verbose output to see detailed test information
 - Use `-s` to see print statements and debug output during test execution
 - Use `--tb=short` for shorter traceback on failures
 - Use `--tb=long` for detailed traceback when debugging
 - Combine with `--cov=app` to see code coverage for just that test
+- Test method names use `::` notation: `file.py::TestClass::test_method`
+
+#### General Tips:
+- Python unittest is built-in and requires no additional dependencies
+- pytest offers more features but requires installation: `pip install pytest`
+- Both approaches work with the same test files and test methods
+- Use unittest for quick testing, pytest for advanced features like coverage reports
 
 ## Prerequisites
 
