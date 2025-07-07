@@ -185,6 +185,52 @@ pytest test_corpus_integration.py::TestCorpusIntegrationWorkflow -v
 pytest test_corpus_integration.py::TestCorpusConfigurationEdgeCases -v
 ```
 
+### Option 5: Running Specific Test Methods
+You can run individual test methods for focused testing or debugging:
+
+```bash
+# Run a specific test method using pytest
+pytest test_corpus_integration.py::TestCorpusIntegrationWorkflow::test_tree_of_life_citations_and_meanings_real_data -v
+
+# Run multiple specific test methods
+pytest test_integration.py::TestAppIntegration::test_rag_query_endpoint_valid -v
+pytest test_corpus_config.py::TestCorpusConfiguration::test_load_mormon_corpus -v
+
+# Run specific test method with extra verbosity and output
+pytest test_corpus_integration.py::TestCorpusIntegrationWorkflow::test_tree_of_life_citations_and_meanings_real_data -v -s
+
+# Using unittest module directly (alternative approach)
+python -m unittest test_corpus_integration.TestCorpusIntegrationWorkflow.test_tree_of_life_citations_and_meanings_real_data -v
+
+# Run test method with coverage report
+pytest test_corpus_integration.py::TestCorpusIntegrationWorkflow::test_tree_of_life_citations_and_meanings_real_data -v --cov=app
+```
+
+**Common Test Method Examples:**
+```bash
+# Test the tree of life analysis with real Mormon data
+pytest test_corpus_integration.py::TestCorpusIntegrationWorkflow::test_tree_of_life_citations_and_meanings_real_data -v
+
+# Test basic RAG query functionality
+pytest test_integration.py::TestAppIntegration::test_rag_query_endpoint_valid -v
+
+# Test Mormon corpus loading
+pytest test_corpus_config.py::TestCorpusConfiguration::test_load_mormon_corpus -v
+
+# Test Claude API integration
+pytest test_integration.py::TestAppIntegration::test_analyze_with_claude_function -v
+
+# Test corpus switching workflow
+pytest test_corpus_integration.py::TestCorpusIntegrationWorkflow::test_corpus_switching -v
+```
+
+**Pro Tips for Running Specific Tests:**
+- Use `-v` for verbose output to see detailed test information
+- Use `-s` to see print statements and debug output during test execution
+- Use `--tb=short` for shorter traceback on failures
+- Use `--tb=long` for detailed traceback when debugging
+- Combine with `--cov=app` to see code coverage for just that test
+
 ## Prerequisites
 
 ### Required Environment

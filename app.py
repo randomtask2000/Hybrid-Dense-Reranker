@@ -19,8 +19,18 @@ ANTHROPIC_CLIENT = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
 # Configuration
 CORPUS_SOURCE = os.getenv("CORPUS_SOURCE", "default")  # "default" or "mormon"
-CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", "500"))  # Characters per chunk
-CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "50"))  # Overlap between chunks
+
+# Handle CHUNK_SIZE with error handling
+try:
+    CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", "500"))  # Characters per chunk
+except (ValueError, TypeError):
+    CHUNK_SIZE = 500  # Default fallback
+
+# Handle CHUNK_OVERLAP with error handling  
+try:
+    CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "50"))  # Overlap between chunks
+except (ValueError, TypeError):
+    CHUNK_OVERLAP = 50  # Default fallback
 
 def load_mormon_corpus():
     """Load and chunk the Mormon text from the data file."""
