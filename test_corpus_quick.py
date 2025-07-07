@@ -25,32 +25,32 @@ def test_default_corpus():
         corpus = load_corpus()
         
         if not corpus:
-            print("  ✗ Failed to load default corpus")
+            print("  ❌ Failed to load default corpus")
             return False
         
-        print(f"  ✓ Loaded {len(corpus)} documents from default corpus")
+        print(f"  ✅ Loaded {len(corpus)} documents from default corpus")
         
         # Check structure
         first_doc = corpus[0]
         if 'title' not in first_doc or 'content' not in first_doc:
-            print("  ✗ Invalid document structure")
+            print("  ❌ Invalid document structure")
             return False
         
-        print(f"  ✓ Document structure valid")
+        print(f"  ✅ Document structure valid")
         
         # Check for legal content
         legal_keywords = ['legal', 'contract', 'liability', 'risk', 'compliance']
         found_legal = any(keyword in doc['content'].lower() for doc in corpus for keyword in legal_keywords)
         
         if found_legal:
-            print("  ✓ Contains expected legal content")
+            print("  ✅ Contains expected legal content")
         else:
-            print("  ⚠ No legal content found (unexpected for default corpus)")
+            print("  ⚠️ No legal content found (unexpected for default corpus)")
         
         return True
         
     except Exception as e:
-        print(f"  ✗ Error: {e}")
+        print(f"  ❌ Error: {e}")
         return False
 
 def test_mormon_corpus():
@@ -59,7 +59,7 @@ def test_mormon_corpus():
     
     # Check if Mormon text file exists
     if not os.path.exists('data/mormon13short.txt'):
-        print("  ⚠ Mormon text file not found, skipping test")
+        print("  ⚠️ Mormon text file not found, skipping test")
         return True
     
     # Set environment for Mormon corpus
@@ -77,39 +77,39 @@ def test_mormon_corpus():
         corpus = load_corpus()
         
         if not corpus:
-            print("  ✗ Failed to load Mormon corpus")
+            print("  ❌ Failed to load Mormon corpus")
             return False
         
-        print(f"  ✓ Loaded {len(corpus)} documents from Mormon corpus")
+        print(f"  ✅ Loaded {len(corpus)} documents from Mormon corpus")
         
         # Check structure
         first_doc = corpus[0]
         if 'title' not in first_doc or 'content' not in first_doc:
-            print("  ✗ Invalid document structure")
+            print("  ❌ Invalid document structure")
             return False
         
-        print(f"  ✓ Document structure valid")
+        print(f"  ✅ Document structure valid")
         
         # Check for Mormon content
         mormon_keywords = ['Nephi', 'Jacob', 'Lord', 'wilderness', 'record']
         found_mormon = any(keyword in doc['content'] for doc in corpus for keyword in mormon_keywords)
         
         if found_mormon:
-            print("  ✓ Contains expected Mormon content")
+            print("  ✅ Contains expected Mormon content")
         else:
-            print("  ⚠ No Mormon content found")
+            print("  ⚠️ No Mormon content found")
         
         # Check chunk sizes
         oversized_chunks = [doc for doc in corpus if len(doc['content']) > 500]
         if oversized_chunks:
-            print(f"  ⚠ Found {len(oversized_chunks)} chunks exceeding size limit")
+            print(f"  ⚠️ Found {len(oversized_chunks)} chunks exceeding size limit")
         else:
-            print("  ✓ All chunks within size limit")
+            print("  ✅ All chunks within size limit")
         
         return True
         
     except Exception as e:
-        print(f"  ✗ Error: {e}")
+        print(f"  ❌ Error: {e}")
         return False
 
 def test_api_endpoint():
@@ -128,20 +128,20 @@ def test_api_endpoint():
                              content_type='application/json')
         
         if response.status_code != 200:
-            print(f"  ✗ API returned status {response.status_code}")
+            print(f"  ❌ API returned status {response.status_code}")
             return False
         
         data = response.get_json()
         
         if not isinstance(data, list):
-            print("  ✗ API response is not a list")
+            print("  ❌ API response is not a list")
             return False
         
         if len(data) == 0:
-            print("  ⚠ API returned no results")
+            print("  ⚠️ API returned no results")
             return True
         
-        print(f"  ✓ API returned {len(data)} results")
+        print(f"  ✅ API returned {len(data)} results")
         
         # Check result structure
         first_result = data[0]
@@ -149,14 +149,14 @@ def test_api_endpoint():
         missing_fields = [field for field in required_fields if field not in first_result]
         
         if missing_fields:
-            print(f"  ✗ Missing fields in result: {missing_fields}")
+            print(f"  ❌ Missing fields in result: {missing_fields}")
             return False
         
-        print("  ✓ Result structure valid")
+        print("  ✅ Result structure valid")
         return True
         
     except Exception as e:
-        print(f"  ✗ Error: {e}")
+        print(f"  ❌ Error: {e}")
         return False
 
 def test_environment_variables():
@@ -180,15 +180,15 @@ def test_environment_variables():
         corpus = load_corpus()
         
         if not corpus:
-            print("  ✗ Failed to load corpus with missing environment variables")
+            print("  ❌ Failed to load corpus with missing environment variables")
             return False
         
-        print("  ✓ Successfully loaded corpus with default values")
+        print("  ✅ Successfully loaded corpus with default values")
         
         return True
         
     except Exception as e:
-        print(f"  ✗ Error: {e}")
+        print(f"  ❌ Error: {e}")
         return False
     
     finally:
@@ -223,7 +223,7 @@ def main():
             result = test_func()
             results.append((test_name, result))
         except Exception as e:
-            print(f"  ✗ Unexpected error: {e}")
+            print(f"  ❌ Unexpected error: {e}")
             results.append((test_name, False))
     
     # Summary
@@ -235,7 +235,7 @@ def main():
     total = len(results)
     
     for test_name, result in results:
-        status = "✓ PASSED" if result else "✗ FAILED"
+        status = "✅ PASSED" if result else "❌ FAILED"
         print(f"{test_name}: {status}")
     
     print(f"\nOverall: {passed}/{total} tests passed")
