@@ -29,15 +29,81 @@ Since Anthropic doesn't provide an embeddings API (they focus on text generation
 
 ## Setup Instructions
 
-### 1. Install Dependencies
+### Quick Setup (Recommended)
 
+For a quick automated setup, run the provided setup script:
+
+**On macOS/Linux:**
 ```bash
-pip install flask numpy faiss-cpu requests python-dotenv anthropic scikit-learn
+# Make the script executable (if not already)
+chmod +x setup_venv.sh
+
+# Run the setup script
+./setup_venv.sh
 ```
 
-### 2. Set Environment Variable
+**On Windows:**
+```cmd
+# Run the batch script
+setup_venv.bat
+```
 
-You need an Anthropic API key for Claude. Get one from [Anthropic's Console](https://console.anthropic.com/).
+This script will:
+- Create a virtual environment
+- Install all dependencies
+- Create a `.env` file from the template
+- Provide next steps
+
+### Manual Setup
+
+### 1. Clone and Navigate to Project
+
+```bash
+git clone <repository-url>
+cd Hybrid-Dense-Reranker
+```
+
+### 2. Create Virtual Environment
+
+Create a Python virtual environment to isolate project dependencies:
+
+```bash
+# Create virtual environment
+python -m venv venv
+
+# Activate virtual environment
+# On macOS/Linux:
+source venv/bin/activate
+# On Windows:
+# venv\Scripts\activate
+```
+
+You should see `(venv)` in your terminal prompt when the virtual environment is active.
+
+### 3. Install Dependencies
+
+With the virtual environment activated, install the required packages:
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Configure Environment Variables
+
+Copy the example environment file and configure your API key:
+
+```bash
+cp .env.example .env
+```
+
+Edit the `.env` file and replace `your-anthropic-api-key-here` with your actual Anthropic API key:
+
+```bash
+# Get your API key from: https://console.anthropic.com/
+ANTHROPIC_API_KEY=your-actual-api-key-here
+```
+
+**Alternative method** - Set environment variable directly:
 
 ```bash
 export ANTHROPIC_API_KEY='your-anthropic-api-key-here'
@@ -50,7 +116,7 @@ echo 'export ANTHROPIC_API_KEY="your-anthropic-api-key-here"' >> ~/.zshrc
 source ~/.zshrc
 ```
 
-### 3. Test the Setup
+### 5. Test the Setup
 
 Run the test script to verify everything works:
 
@@ -58,10 +124,43 @@ Run the test script to verify everything works:
 python test_embedding.py
 ```
 
-### 4. Run the Application
+### 6. Run the Application
+
+Make sure your virtual environment is activated, then run:
 
 ```bash
+# Ensure virtual environment is activated
+source venv/bin/activate  # On macOS/Linux
+# venv\Scripts\activate   # On Windows
+
+# Run the application
 python app.py
+```
+
+### 7. Virtual Environment Management
+
+**Deactivating the virtual environment:**
+```bash
+deactivate
+```
+
+**Reactivating the virtual environment:**
+```bash
+# Navigate to project directory
+cd /path/to/Hybrid-Dense-Reranker
+
+# Activate virtual environment
+source venv/bin/activate  # On macOS/Linux
+# venv\Scripts\activate   # On Windows
+```
+
+**Installing additional packages:**
+```bash
+# With virtual environment activated
+pip install package-name
+
+# Update requirements.txt if needed
+pip freeze > requirements.txt
 ```
 
 ## Usage

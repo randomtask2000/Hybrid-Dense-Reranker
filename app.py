@@ -5,6 +5,10 @@ import requests
 import os
 from sklearn.feature_extraction.text import TfidfVectorizer
 import anthropic
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
 
