@@ -59,7 +59,7 @@ This script will:
 ### 1. Clone and Navigate to Project
 
 ```bash
-git clone <repository-url>
+git clone git@github.com:randomtask2000/Hybrid-Dense-Reranker.git
 cd Hybrid-Dense-Reranker
 ```
 

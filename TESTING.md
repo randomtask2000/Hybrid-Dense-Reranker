@@ -35,11 +35,68 @@ Performance and stress tests:
 - **`test_multiple_concurrent_requests()`** - Tests handling multiple simultaneous requests
 - **`test_large_query_text()`** - Tests with very large query inputs
 
+### `test_corpus_config.py`
+Unit tests for configurable corpus loading functionality:
+
+#### `TestCorpusConfiguration`
+Core corpus configuration tests:
+
+- **`test_load_default_corpus()`** - Tests loading the default legal corpus
+- **`test_load_mormon_corpus()`** - Tests loading Mormon text corpus from data files
+- **`test_chunk_text_basic()`** - Tests basic text chunking functionality
+- **`test_chunk_text_with_overlap()`** - Tests chunking with configurable overlap
+- **`test_chunk_text_edge_cases()`** - Tests chunking with edge cases (empty text, very small chunks)
+- **`test_environment_variable_loading()`** - Tests corpus source selection via environment variables
+
+#### `TestCorpusConfigurationIntegration`
+Integration tests for corpus configuration:
+
+- **`test_corpus_integration_with_vectorizer()`** - Tests corpus integration with TF-IDF vectorizer
+- **`test_corpus_integration_with_faiss()`** - Tests corpus integration with FAISS indexing
+- **`test_environment_variable_changes()`** - Tests dynamic corpus switching via environment changes
+
+#### `TestCorpusChunking`
+Specialized tests for text chunking functionality:
+
+- **`test_chunk_size_configuration()`** - Tests configurable chunk sizes via CHUNK_SIZE environment variable
+- **`test_chunk_overlap_configuration()`** - Tests configurable overlap via CHUNK_OVERLAP environment variable
+- **`test_chunking_preserves_meaning()`** - Tests that chunking preserves semantic meaning at boundaries
+
+### `test_corpus_integration.py`
+End-to-end integration tests for corpus configuration:
+
+#### `TestCorpusIntegrationWorkflow`
+Complete workflow tests with different corpus sources:
+
+- **`test_end_to_end_with_default_corpus()`** - Tests complete RAG workflow with default legal corpus
+- **`test_end_to_end_with_mormon_corpus()`** - Tests complete RAG workflow with Mormon text corpus
+- **`test_corpus_switching_workflow()`** - Tests switching between corpus sources during runtime
+- **`test_vector_index_consistency()`** - Tests that vector indices remain consistent across corpus changes
+
+#### `TestCorpusConfigurationEdgeCases`
+Edge case and error handling tests:
+
+- **`test_invalid_corpus_source()`** - Tests handling of invalid corpus source configurations
+- **`test_missing_corpus_files()`** - Tests handling when corpus data files are missing
+- **`test_corrupted_corpus_data()`** - Tests handling of corrupted or malformed corpus data
+- **`test_empty_corpus_handling()`** - Tests behavior with empty corpus configurations
+
+### `test_corpus_quick.py`
+Quick validation tests for corpus functionality:
+
+- **`test_default_corpus()`** - Quick smoke test for default corpus loading
+- **`test_mormon_corpus()`** - Quick smoke test for Mormon corpus loading
+- **`test_corpus_structure_validation()`** - Quick validation of corpus document structure
+- **`test_environment_setup()`** - Quick validation of environment variable configuration
+
 ## Test Coverage
 
 ### Functions Tested
 - [`get_embedding(text)`](app.py:30) - TF-IDF embedding generation
 - [`analyze_with_claude(text, query)`](app.py:35) - Claude relevance scoring
+- [`load_corpus()`](app.py) - Configurable corpus loading (default legal vs Mormon text)
+- [`chunk_text(text, chunk_size, overlap)`](app.py) - Text chunking with configurable parameters
+- [`setup_corpus_from_environment()`](app.py) - Environment-based corpus configuration
 
 ### Endpoints Tested
 - [`POST /rag-query`](app.py:63) - Main RAG query endpoint
@@ -54,6 +111,11 @@ Performance and stress tests:
 - Anthropic Claude API integration
 - Flask request/response handling
 - JSON serialization/deserialization
+- Configurable corpus loading and switching
+- Text chunking and overlap processing
+- Environment variable-based configuration
+- Multiple corpus source support (default legal, Mormon text)
+- Vector index consistency across corpus changes
 
 ## Running the Tests
 
@@ -89,13 +151,38 @@ pytest test_integration.py -v
 pytest test_integration.py -v --cov=app --cov-report=html
 ```
 
-### Option 3: Specific Test Classes
+#### Option 3: Corpus Tests
+```bash
+# Run comprehensive corpus tests (recommended for corpus functionality)
+python run_corpus_tests.py
+
+# Run specific corpus test files
+python test_corpus_config.py          # Unit tests for corpus configuration
+python test_corpus_integration.py     # Integration tests for corpus workflows
+python test_corpus_quick.py          # Quick validation tests
+
+# Using pytest for corpus tests
+pytest test_corpus_config.py -v
+pytest test_corpus_integration.py -v
+pytest test_corpus_quick.py -v
+
+# Run all corpus tests with coverage
+pytest test_corpus*.py -v --cov=app --cov-report=html
+```
+
+### Option 4: Specific Test Classes
 ```bash
 # Run only integration tests
 pytest test_integration.py::TestAppIntegration -v
 
 # Run only performance tests
 pytest test_integration.py::TestAppPerformance -v
+
+# Run specific corpus test classes
+pytest test_corpus_config.py::TestCorpusConfiguration -v
+pytest test_corpus_config.py::TestCorpusChunking -v
+pytest test_corpus_integration.py::TestCorpusIntegrationWorkflow -v
+pytest test_corpus_integration.py::TestCorpusConfigurationEdgeCases -v
 ```
 
 ## Prerequisites
@@ -106,6 +193,9 @@ pytest test_integration.py::TestAppPerformance -v
 3. **Environment Variables**: Ensure `.env` file exists and is configured:
    ```
    ANTHROPIC_API_KEY=your-actual-api-key
+   CORPUS_SOURCE=default  # or 'mormon' for Mormon text corpus
+   CHUNK_SIZE=500         # optional: chunk size for text processing
+   CHUNK_OVERLAP=50       # optional: overlap between chunks
    ```
 4. **Test Dependencies** (optional): Install with `pip install -r test_requirements.txt`
 
@@ -139,6 +229,26 @@ Tests with realistic queries that should return meaningful results:
 - Security queries: "security and authentication"  
 - Financial queries: "revenue and financial performance"
 
+### Corpus-Specific Query Tests
+Tests tailored to different corpus sources:
+
+#### Default Legal Corpus
+- Contract queries: "contract terms and conditions"
+- Compliance queries: "regulatory compliance requirements"
+- Risk assessment queries: "liability and legal risks"
+
+#### Mormon Text Corpus
+- Scripture queries: "Nephi teachings and revelations"
+- Doctrinal queries: "faith and righteousness principles"
+- Historical queries: "wilderness journey and trials"
+
+### Corpus Configuration Tests
+Tests for corpus switching and configuration:
+- Environment variable-based corpus selection
+- Dynamic corpus switching during runtime
+- Chunk size and overlap configuration
+- Corpus data integrity validation
+
 ### Edge Case Tests
 Tests with unusual or problematic inputs:
 - Empty queries
@@ -153,6 +263,10 @@ Tests that verify graceful error handling:
 - Invalid API keys
 - Network timeouts
 - Malformed requests
+- Invalid corpus source configuration
+- Missing corpus data files
+- Corrupted corpus data
+- Empty or malformed chunk configurations
 
 ## Expected Results
 
@@ -165,9 +279,10 @@ When all tests pass, you should see:
 - Sorted results by combined score
 
 ### Test Metrics
-- **Total Tests**: ~20 individual test methods
-- **Coverage**: Tests cover all major code paths in `app.py`
+- **Total Tests**: ~20 individual test methods (integration) + ~25 corpus test methods
+- **Coverage**: Tests cover all major code paths in `app.py` including corpus functionality
 - **Execution Time**: Typically 30-60 seconds (depends on Claude API response times)
+- **Corpus Tests**: Additional 30-45 seconds for comprehensive corpus functionality testing
 
 ## Troubleshooting
 
@@ -191,6 +306,18 @@ When all tests pass, you should see:
 - Ensure `faiss-cpu` is properly installed
 - On some systems, you may need `faiss-gpu` instead
 
+#### Corpus configuration errors
+- Check `CORPUS_SOURCE` environment variable (should be 'default' or 'mormon')
+- Verify corpus data files exist in `data/` directory:
+  - `mormon13.txt` and `mormon13short.txt` for Mormon corpus
+- Validate `CHUNK_SIZE` and `CHUNK_OVERLAP` are positive integers
+- Ensure corpus files are readable and contain valid text content
+
+#### "Missing corpus data" errors
+- Check that `data/mormon13.txt` exists for Mormon corpus
+- Verify file permissions allow reading
+- Ensure corpus files are not empty or corrupted
+
 ### Test Failure Analysis
 
 If tests fail, check:
@@ -198,6 +325,8 @@ If tests fail, check:
 2. **API Connectivity**: Ensure Claude API is accessible
 3. **Data Integrity**: Verify corpus data is properly loaded
 4. **Index State**: Check if FAISS index is properly initialized
+5. **Corpus Configuration**: Verify CORPUS_SOURCE, CHUNK_SIZE, and CHUNK_OVERLAP settings
+6. **Data Files**: Ensure corpus data files exist and are accessible
 
 ## Extending the Tests
 
