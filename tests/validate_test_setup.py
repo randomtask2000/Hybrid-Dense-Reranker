@@ -8,6 +8,10 @@ and can run basic functionality tests before running the full integration suite.
 
 import os
 import sys
+
+# Add parent directory to path for imports
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+
 from dotenv import load_dotenv
 
 def main():

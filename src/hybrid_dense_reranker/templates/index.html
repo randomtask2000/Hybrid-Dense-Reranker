@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Search - Hybrid Dense Reranker{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="text-center mb-5">
+            <h1 class="display-4 text-primary">
+                <i class="fas fa-robot me-3"></i>
+                RAG Search
+            </h1>
+            <p class="lead text-muted">
+                Intelligent document search using TF-IDF embeddings and Claude AI reranking
+            </p>
+        </div>
+
+        <!-- Search Form -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <form id="searchForm">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <input type="text" 
+                                   class="form-control form-control-lg" 
+                                   id="queryInput" 
+                                   placeholder="Enter your search query..."
+                                   required>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" 
+                                    class="btn btn-primary btn-lg w-100" 
+                                    id="searchBtn">
+                                <i class="fas fa-search"></i>
+                                Search
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div id="loadingSpinner" class="text-center d-none mb-4">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Searching...</span>
+            </div>
+            <p class="mt-2 text-muted">Analyzing documents with Claude AI...</p>
+        </div>
+
+        <!-- Results Container -->
+        <div id="resultsContainer"></div>
+
+        <!-- Example Queries -->
+        <div class="card mt-5">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-lightbulb me-2"></i>
+                    Example Queries
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Legal Documents:</h6>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-outline-secondary btn-sm example-query" 
+                                    data-query="legal risks and liability">
+                                Legal risks and liability
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm example-query" 
+                                    data-query="contract obligations">
+                                Contract obligations
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Security & Finance:</h6>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-outline-secondary btn-sm example-query" 
+                                    data-query="security and authentication">
+                                Security and authentication
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm example-query" 
+                                    data-query="financial performance">
+                                Financial performance
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3" id="mormonExamples" style="display: none;">
+                    <div class="col-12">
+                        <h6>Mormon Corpus:</h6>
+                        <div class="d-grid gap-2 d-md-block">
+                            <button class="btn btn-outline-info btn-sm example-query" 
+                                    data-query="Nephi and his teachings about faith">
+                                Nephi and faith
+                            </button>
+                            <button class="btn btn-outline-info btn-sm example-query" 
+                                    data-query="Lord and his commandments">
+                                Lord and commandments
+                            </button>
+                            <button class="btn btn-outline-info btn-sm example-query" 
+                                    data-query="righteousness and justice">
+                                Righteousness and justice
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

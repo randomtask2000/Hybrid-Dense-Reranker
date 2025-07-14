@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Health Status - Hybrid Dense Reranker{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="text-center mb-4">
+            <h1 class="display-4">
+                <i class="fas fa-heartbeat text-success me-3"></i>
+                System Health
+            </h1>
+        </div>
+
+        <div id="healthContainer">
+            <div class="text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading health status...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-info-circle me-2"></i>
+                    System Information
+                </h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li><strong>Architecture:</strong> Hybrid TF-IDF + Claude AI</li>
+                    <li><strong>Scoring:</strong> 30% TF-IDF + 70% Claude relevance</li>
+                    <li><strong>Retrieval:</strong> Top-k=3 documents</li>
+                    <li><strong>Model:</strong> Claude-3-Sonnet-20240229</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Fetch and display health status
+fetch('/health')
+    .then(response => response.json())
+    .then(data => {
+        const container = document.getElementById('healthContainer');
+        const statusIcon = data.status === 'healthy' ? 'fas fa-check-circle text-success' : 'fas fa-exclamation-triangle text-warning';
+        
+        container.innerHTML = `
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="${statusIcon}" style="font-size: 3rem;"></i>
+                    <h3 class="mt-3">Status: ${data.status.charAt(0).toUpperCase() + data.status.slice(1)}</h3>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h5 class="card-title">Corpus Size</h5>
+                                    <h2 class="text-primary">${data.corpus_size}</h2>
+                                    <small class="text-muted">documents loaded</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h5 class="card-title">Last Updated</h5>
+                                    <h2 class="text-primary">${new Date().toLocaleTimeString()}</h2>
+                                    <small class="text-muted">current time</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    })
+    .catch(error => {
+        const container = document.getElementById('healthContainer');
+        container.innerHTML = `
+            <div class="alert alert-danger" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Failed to fetch health status: ${error.message}
+            </div>
+        `;
+    });
+</script>
+{% endblock %}

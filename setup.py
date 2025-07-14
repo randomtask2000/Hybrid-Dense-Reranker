@@ -6,7 +6,8 @@ setup(
     description="A hybrid dense reranker using TF-IDF embeddings and Anthropic Claude for intelligent reranking",
     author="Your Name",
     author_email="your.email@example.com",
-    packages=find_packages(),
+    package_dir={"": "src"},
+    packages=find_packages(where="src"),
     install_requires=[
         "flask>=2.0.0",
         "numpy>=1.21.0",
@@ -17,6 +18,11 @@ setup(
         "scikit-learn>=1.0.0"
     ],
     python_requires=">=3.8",
+    entry_points={
+        "console_scripts": [
+            "hybrid-dense-reranker=hybrid_dense_reranker.app:run_app",
+        ],
+    },
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
